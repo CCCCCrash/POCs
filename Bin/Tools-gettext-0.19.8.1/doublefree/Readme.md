@@ -86,3 +86,96 @@ ubuntu@VM-12-40-ubuntu:~/fuzz/gettext-0.19.8.1-san/gettext-0.19.8.1/gettext-tool
 7ffc2b7ca000-7ffc2b7cc000 r-xp 00000000 00:00 0                          [vdso]
 ffffffffff600000-ffffffffff601000 r-xp 00000000 00:00 0                  [vsyscall]
 Aborted
+
+
+and the valgrind said:
+
+==6238== Memcheck, a memory error detector
+==6238== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==6238== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+==6238== Command: .libs/lt-msgfmt --check ../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz
+==6238==
+==6238== Conditional jump or move depends on uninitialised value(s)
+==6238==    at 0x50AC98C: freea (malloca.c:125)
+==6238==    by 0x4E4A229: po_lex_charset_set (po-charset.c:632)
+==6238==    by 0x4E499CC: do_callback_message (po-gram-gen.y:106)
+==6238==    by 0x4E499CC: po_gram_parse (po-gram-gen.y:204)
+==6238==    by 0x4E4A4F6: po_parse (read-po.c:41)
+==6238==    by 0x4E46025: catalog_reader_parse (read-catalog-abstract.c:179)
+==6238==    by 0x404CCE: read_catalog_file_msgfmt (msgfmt.c:1415)
+==6238==    by 0x403E1F: main (msgfmt.c:746)
+==6238==
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:17: duplicate message definition...
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:16: ...this is the location of the first definition
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:18:3: syntax error
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:18: keyword "n" unknown
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:19: end-of-line within string
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:28: duplicate message definition...
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:24: ...this is the location of the first definition
+==6238== Invalid free() / delete / delete[] / realloc()
+==6238==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==6238==    by 0x4E49599: po_gram_parse (po-gram-gen.y:237)
+==6238==    by 0x4E4A4F6: po_parse (read-po.c:41)
+==6238==    by 0x4E46025: catalog_reader_parse (read-catalog-abstract.c:179)
+==6238==    by 0x404CCE: read_catalog_file_msgfmt (msgfmt.c:1415)
+==6238==    by 0x403E1F: main (msgfmt.c:746)
+==6238==  Address 0x641f8b0 is 0 bytes inside a block of size 24 free'd
+==6238==    at 0x4C2EDEB: free (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==6238==    by 0x4E4D8CE: default_add_message (read-catalog.c:378)
+==6238==    by 0x4E4D583: call_add_message (read-catalog.c:64)
+==6238==    by 0x4E4D583: default_directive_message (read-catalog.c:248)
+==6238==    by 0x4E46139: call_directive_message (read-catalog-abstract.c:107)
+==6238==    by 0x4E46139: po_callback_message (read-catalog-abstract.c:219)
+==6238==    by 0x4E49935: do_callback_message (po-gram-gen.y:108)
+==6238==    by 0x4E49935: po_gram_parse (po-gram-gen.y:225)
+==6238==    by 0x4E4A4F6: po_parse (read-po.c:41)
+==6238==    by 0x4E46025: catalog_reader_parse (read-catalog-abstract.c:179)
+==6238==    by 0x404CCE: read_catalog_file_msgfmt (msgfmt.c:1415)
+==6238==    by 0x403E1F: main (msgfmt.c:746)
+==6238==  Block was alloc'd at
+==6238==    at 0x4C2DB8F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==6238==    by 0x50BC3D8: xmalloc (xmalloc.c:65)
+==6238==    by 0x50BC4F1: xstrdup (xstrdup.c:40)
+==6238==    by 0x4E4CE7F: string_list_append (str-list.c:74)
+==6238==    by 0x4E48A3E: po_gram_parse (po-gram-gen.y:417)
+==6238==    by 0x4E4A4F6: po_parse (read-po.c:41)
+==6238==    by 0x4E46025: catalog_reader_parse (read-catalog-abstract.c:179)
+==6238==    by 0x404CCE: read_catalog_file_msgfmt (msgfmt.c:1415)
+==6238==    by 0x403E1F: main (msgfmt.c:746)
+==6238==
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:35: keyword "msgud_plural" unknown
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:34: missing 'msgstr' section
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:35:13: syntax error
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:40: end-of-line within string
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:46: end-of-line within string
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz: warning: Charset missing in header.
+                                                                                                                                                                   Message conversion to user's charset will not work.
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:42: duplicate message definition...
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:6: ...this is the location of the first definition
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:46:2: syntax error
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:46: keyword "Ep" unknown
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:47: keyword "C" unknown
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:48: keyword "s" unknown
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:49: keyword "bo" unknown
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:50: keyword "S" unknown
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:50:236: invalid control sequence
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:50:397: invalid control sequence
+../../../../gettext-0.19.8.1/gettext-tools/src/fuzz_msgfmt/SIGSEGV.PC.7ffff672fbed.STACK.19a5afbc2a.CODE.128.ADDR.(nil).INSTR.mov____0x10(%rcx),%r8.fuzz:51: end-of-line within string
+.libs/lt-msgfmt: too many errors, aborting
+==6238==
+==6238== HEAP SUMMARY:
+==6238==     in use at exit: 41,477 bytes in 117 blocks
+==6238==   total heap usage: 635 allocs, 519 frees, 86,604 bytes allocated
+==6238==
+==6238== LEAK SUMMARY:
+==6238==    definitely lost: 650 bytes in 82 blocks
+==6238==    indirectly lost: 0 bytes in 0 blocks
+==6238==      possibly lost: 0 bytes in 0 blocks
+==6238==    still reachable: 40,827 bytes in 35 blocks
+==6238==         suppressed: 0 bytes in 0 blocks
+==6238== Rerun with --leak-check=full to see details of leaked memory
+==6238==
+==6238== For counts of detected and suppressed errors, rerun with: -v
+==6238== Use --track-origins=yes to see where uninitialised values come from
+==6238== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
+
