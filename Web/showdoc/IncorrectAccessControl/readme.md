@@ -1,6 +1,9 @@
 The access control is not configured correctly.User's note can be read by others no matter who.
 
 PoC:
+ps: all projects are not use password to protect.
+
+#### 0x01 Read
 
 I resisted two users in two browsers separately:kk123 and kk1234.
 
@@ -21,3 +24,18 @@ Another page reveals information also.
 If I user burp suite, I will see more information such as user's name
 
 ![](./4.png)
+
+
+#### 0x02 Modify
+
+open other's note, click the edit buttom, althrough it pop a window saied "you do not have the permission", but you can edit it.
+
+![](./7.png)
+
+I add a newline, and save it.
+
+![](./6.png)
+
+In other user's account, a new line was added
+
+![](./5.png)
