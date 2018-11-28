@@ -28,14 +28,3 @@ If I user burp suite, I will see more information such as user's name
 
 #### 0x02 Modify
 
-open other's note, click the edit buttom, althrough it pop a window saied "you do not have the permission", but you can edit it.
-
-![](./7.png)
-
-I add a newline, and save it.
-
-![](./6.png)
-
-In other user's account, a new line was added
-
-![](./5.png)
