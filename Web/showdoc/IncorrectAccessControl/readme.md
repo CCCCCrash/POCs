@@ -28,7 +28,7 @@ If I user burp suite, I will see more information such as user's name
 
 #### 0x02 Modify
 
-notefied the ower to fixed it already.
+notefied the owner to fixed it already.
 
 open other's note, click the edit buttom, althrough it pop a window saied "you do not have the permission", but you can edit it.
 
